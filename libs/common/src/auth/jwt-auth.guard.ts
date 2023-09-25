@@ -6,7 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { map, Observable, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap } from 'rxjs';
 import { AUTH_SERVICE } from '../constants';
 import { UserDto } from '../dto';
 
@@ -22,7 +22,7 @@ export class JwtAuthGuard implements CanActivate {
     const jwt =
       context.switchToHttp().getRequest().cookies?.Authentication ||
       context.switchToHttp().getRequest().headers?.authentication;
-    this.logger.warn(jwt);
+
     if (!jwt) {
       return false;
     }
@@ -35,6 +35,10 @@ export class JwtAuthGuard implements CanActivate {
           context.switchToHttp().getRequest().user = res;
         }),
         map(() => true),
+        catchError((err) => {
+          this.logger.error(err);
+          return of(false);
+        }),
       );
   }
 }
