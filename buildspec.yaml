@@ -1,0 +1,31 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_PATH}
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker images...
+
+      - docker build -t reservations -f ./apps/reservations/Dockerfile .
+      - docker tag reservations:latest ${AWS_PATH}/reservations:latest
+
+      - docker build -t auth -f ./apps/auth/Dockerfile .
+      - docker tag auth:latest ${AWS_PATH}/auth:latest
+
+      - docker build -t payments -f ./apps/payments/Dockerfile .
+      - docker tag payments:latest ${AWS_PATH}/payments:latest
+
+      - docker build -t notifications -f ./apps/notifications/Dockerfile .
+      - docker tag notifications:latest ${AWS_PATH}/notifications:latest
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push ${AWS_PATH}/reservations:latest
+      - docker push ${AWS_PATH}/auth:latest
+      - docker push ${AWS_PATH}/payments:latest
+      - docker push ${AWS_PATH}/notifications:latest
