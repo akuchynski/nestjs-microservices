@@ -3,7 +3,7 @@ services:
     build:
       dockerfile: ./Dockerfile
     volumes:
-      - ./specs:/usr/src/app
+      - ./specs:/usr/src/app/specs
     depends_on:
       - reservations
       - auth

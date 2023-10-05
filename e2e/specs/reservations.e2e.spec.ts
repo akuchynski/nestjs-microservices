@@ -4,7 +4,7 @@ describe('Reservations', () => {
   beforeAll(async () => {
     const user = {
       email: 'test@test.com',
-      password: 'TestPassword',
+      password: 'TestPassword1!',
     };
     await fetch('http://auth:3001/users', {
       method: 'POST',
