@@ -12,6 +12,8 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+    depends_on:
+      - rabbitmq
   auth:
     build:
       context: .
@@ -25,6 +27,8 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+    depends_on:
+      - rabbitmq
   payments:
     build:
       context: .
@@ -36,6 +40,8 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+    depends_on:
+      - rabbitmq
   notifications:
     build:
       context: .
@@ -47,5 +53,11 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+    depends_on:
+      - rabbitmq
   mongo:
     image: mongo
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - 5672:5672
