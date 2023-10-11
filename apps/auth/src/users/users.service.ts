@@ -4,7 +4,6 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
-
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersRepository } from './users.repository';
 import { GetUserDto } from './dto/get-user.dto';
@@ -41,5 +40,9 @@ export class UsersService {
 
   async getUser(getUserDto: GetUserDto) {
     return await this.usersRepository.findOne(getUserDto);
+  }
+
+  async findAll() {
+    return this.usersRepository.find({});
   }
 }
